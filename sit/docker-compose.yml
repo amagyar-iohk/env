@@ -1,8 +1,5 @@
-services:
-  test:
-    env_file:
-      - sit/stack.env
 
+services:
   db:
     image: postgres:13
     environment:
@@ -20,6 +17,7 @@ services:
       retries: 5
 
   prism-node:
+    env_file: ./stack.env
     image: docker.io/identus/prism-node:${PRISM_NODE_VERSION}
     environment:
       NODE_PSQL_HOST: db:5432
@@ -35,6 +33,7 @@ services:
         condition: service_healthy
 
   cloud-agent:
+    env_file: ./stack.env
     image: docker.io/identus/identus-cloud-agent:${CLOUD_AGENT_VERSION}
     ports:
       - "8085:8085" # API endpoint
