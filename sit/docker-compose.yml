@@ -8,8 +8,8 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - pg_data_db:/var/lib/postgresql/data
-      - ../common/postgres-init-script.sh:/docker-entrypoint-initdb.d/init-script.sh
-      - ../common/postgres-max_conns.sql:/docker-entrypoint-initdb.d/max_conns.sql
+      - postgres-init-script.sh:/docker-entrypoint-initdb.d/init-script.sh
+      - postgres-max_conns.sql:/docker-entrypoint-initdb.d/max_conns.sql
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "agent" ]
       interval: 10s
@@ -99,7 +99,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=admin
       - MONGO_INITDB_DATABASE=mediator
     volumes:
-      - ../common/mongo-initdb.js:/docker-entrypoint-initdb.d/initdb.js
+      - mongo-initdb.js:/docker-entrypoint-initdb.d/initdb.js
 
   identus-mediator:
     image: docker.io/identus/identus-mediator:${MEDIATOR_VERSION}
