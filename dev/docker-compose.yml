@@ -34,8 +34,8 @@ services:
   cloud-agent:
     image: docker.io/identus/identus-cloud-agent:${CLOUD_AGENT_VERSION}
     ports:
-      - "8085:8085" # API endpoint
-      - "8090:8090" # DIDComm endpoint
+      - "9085:8085" # API endpoint
+      - "9090:8090" # DIDComm endpoint
     environment:
       POLLUX_DB_HOST: db
       POLLUX_DB_PORT: 5432
@@ -54,9 +54,9 @@ services:
       AGENT_DB_PASSWORD: postgres
       PRISM_NODE_HOST: prism-node
       PRISM_NODE_PORT: 50053
-      POLLUX_STATUS_LIST_REGISTRY_PUBLIC_URL: http://cloud-agent:8085
-      DIDCOMM_SERVICE_URL: http://cloud-agent:8090
-      REST_SERVICE_URL: http://cloud-agent:8085
+      POLLUX_STATUS_LIST_REGISTRY_PUBLIC_URL: http://cloud-agent:9085
+      DIDCOMM_SERVICE_URL: http://cloud-agent:9090
+      REST_SERVICE_URL: http://cloud-agent:9085
       # VAULT_ADDR:
       # VAULT_TOKEN:
       SECRET_STORAGE_BACKEND: postgres
