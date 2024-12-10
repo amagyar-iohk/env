@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - pg_data_db:/var/lib/postgresql/data
-      - ./postgres-init-script.sh:/docker-entrypoint-initdb.d/init-script.sh
+      - ${PROJECT_PATH:-$PWD}/postgres-init-script.sh:/docker-entrypoint-initdb.d/init-script.sh
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "agent" ]
       interval: 10s
@@ -100,7 +100,7 @@ services:
     volumes:
       - mongo_db:/data/db
       - mongo_configdb:/data/configdb
-      - ./mongo-initdb.js:/docker-entrypoint-initdb.d/initdb.js
+      - ${PROJECT_PATH:-$PWD}/mongo-initdb.js:/docker-entrypoint-initdb.d/initdb.js
 
   identus-mediator:
     image: docker.io/identus/identus-mediator:${MEDIATOR_VERSION}
