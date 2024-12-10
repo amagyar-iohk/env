@@ -99,6 +99,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=admin
       - MONGO_INITDB_DATABASE=mediator
     volumes:
+      - mongo_mediator:/data/db
       - ./mongo-initdb.js:/docker-entrypoint-initdb.d/initdb.js
 
   identus-mediator:
@@ -126,3 +127,4 @@ services:
 
 volumes:
   pg_data_db:
+  mongo_mediator:
