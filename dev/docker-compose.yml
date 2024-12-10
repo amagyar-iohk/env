@@ -92,7 +92,7 @@ services:
   mongo:
     image: mongo:6.0
     ports:
-      - "27017:27017"
+      - "27018:27017"
     command: [ "--auth" ]
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
