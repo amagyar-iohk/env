@@ -80,7 +80,7 @@ services:
       prism-node:
         condition: service_started
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://cloud-agent:9085/_system/health" ]
+      test: [ "CMD", "curl", "-f", "http://cloud-agent:8085/_system/health" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -121,7 +121,7 @@ services:
       - MONGODB_PASSWORD=admin
       - MONGODB_PROTOCOL=mongodb
       - MONGODB_HOST=mongo
-      - MONGODB_PORT=27017
+      - MONGODB_PORT=27018
       - MONGODB_DB_NAME=mediator
     depends_on:
       - "mongo"
