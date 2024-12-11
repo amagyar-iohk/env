@@ -31,7 +31,7 @@ services:
   cloud-agent:
     image: docker.io/identus/identus-cloud-agent:${CLOUD_AGENT_VERSION}
     ports:
-      - "8085" # API endpoint
+      - "8085:8085" # API endpoint
       - "8090" # DIDComm endpoint
     environment:
       POLLUX_DB_HOST: db
@@ -99,7 +99,7 @@ services:
   identus-mediator:
     image: docker.io/identus/identus-mediator:${MEDIATOR_VERSION}
     ports:
-      - "9080:8080"
+      - "8080"
     environment:
       # Creates the identity:
       # These keys are for demo purpose only for production deployments generate keys
@@ -123,8 +123,8 @@ volumes:
   pg_data_db:
   mongo_db:
   mongo_configdb:
-  
-networks:
-  default:
-    name: traefik_default
-    external: true
+
+# networks:
+#   default:
+#     name: traefik_default
+#     external: true
