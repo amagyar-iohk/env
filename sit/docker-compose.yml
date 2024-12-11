@@ -91,6 +91,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    networks:
+      - "traefik_default"
 
   ################
   ### MEDIATOR ###
@@ -136,8 +138,14 @@ services:
       - MONGODB_DB_NAME=mediator
     depends_on:
       - "mongo"
+    networks:
+      - "traefik_default"
 
 volumes:
   pg_data_db:
   mongo_db:
   mongo_configdb:
+
+networks:
+  traefik_default:
+    external: true
