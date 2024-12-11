@@ -33,8 +33,16 @@ services:
   cloud-agent:
     image: docker.io/identus/identus-cloud-agent:${CLOUD_AGENT_VERSION}
     ports:
-      - "8085:8085" # API endpoint
-      - "8090:8090" # DIDComm endpoint
+      - "8085" # API endpoint
+      - "8090" # DIDComm endpoint
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sit-cloud-agent.rule=Host(`sit.agent.localhost`)"
+      - "traefik.http.routers.sit-cloud-agent.entrypoints=web"
+      - "traefik.http.services.sit-cloud-agent.loadbalancer.server.port=8085"
+      - "traefik.http.routers.sit-cloud-agent-didcomm.rule=Host(`sit.agent.localhost/didcomm`)"
+      - "traefik.http.routers.sit-cloud-agent-didcomm.entrypoints=web"
+      - "traefik.http.services.sit-cloud-agent-didcomm.loadbalancer.server.port=8090"
     environment:
       POLLUX_DB_HOST: db
       POLLUX_DB_PORT: 5432
@@ -91,7 +99,7 @@ services:
   mongo:
     image: mongo:6.0
     ports:
-      - "27017:27017"
+      - "27017"
     command: [ "--auth" ]
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
@@ -105,7 +113,11 @@ services:
   identus-mediator:
     image: docker.io/identus/identus-mediator:${MEDIATOR_VERSION}
     ports:
-      - "8080:8080"
+      - "8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sitmediator.rule=Host(`sit.mediator.localhost`)"
+      - "traefik.http.routers.sitmediator.entrypoints=web"
     environment:
       # Creates the identity:
       # These keys are for demo purpose only for production deployments generate keys

@@ -34,8 +34,8 @@ services:
   cloud-agent:
     image: docker.io/identus/identus-cloud-agent:${CLOUD_AGENT_VERSION}
     ports:
-      - "9085:8085" # API endpoint
-      - "9090:8090" # DIDComm endpoint
+      - "8085" # API endpoint
+      - "8090" # DIDComm endpoint
     environment:
       POLLUX_DB_HOST: db
       POLLUX_DB_PORT: 5432
