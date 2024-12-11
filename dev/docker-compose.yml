@@ -1,15 +1,12 @@
 
 services:
   db:
-    image: postgres:13
-    environment:
-      POSTGRES_MULTIPLE_DATABASES: "pollux,connect,agent,node_db"
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    build: 
+      dockerfile: ../docker/postgres.dockerfile
+      no_cache: true
+      context: ../docker
     volumes:
       - pg_data_db:/var/lib/postgresql/data
-      - ${PROJECT_PATH:-$PWD}/postgres-init-script.sh:/docker-entrypoint-initdb.d/init-script.sh
-      - ${PROJECT_PATH:-$PWD}/postgres-max_conns.sql:/docker-entrypoint-initdb.d/max_conns.sql
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "agent" ]
       interval: 10s
@@ -85,23 +82,19 @@ services:
       timeout: 10s
       retries: 5
 
-  ################
-  ### MEDIATOR ###
-  ################
+#   ################
+#   ### MEDIATOR ###
+#   ################
 
   mongo:
-    image: mongo:6.0
-    ports:
-      - "27018:27017"
+    build: 
+      dockerfile: ../docker/mongodb.dockerfile
+      no_cache: true
+      context: ../docker
     command: [ "--auth" ]
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
-      - MONGO_INITDB_DATABASE=mediator
     volumes:
       - mongo_db:/data/db
       - mongo_configdb:/data/configdb
-      - ${PROJECT_PATH:-$PWD}/mongo-initdb.js:/docker-entrypoint-initdb.d/initdb.js
 
   identus-mediator:
     image: docker.io/identus/identus-mediator:${MEDIATOR_VERSION}
