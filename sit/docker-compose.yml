@@ -1,14 +1,12 @@
 
 services:
   db:
-    image: postgres:13
-    environment:
-      POSTGRES_MULTIPLE_DATABASES: "pollux,connect,agent,node_db"
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    build: 
+      dockerfile: ../docker/postgres.dockerfile
+      no_cache: true
+      context: ../docker
     volumes:
       - pg_data_db:/var/lib/postgresql/data
-      - ./postgres-init-script.sh:/docker-entrypoint-initdb.d/init-script.sh
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "agent" ]
       interval: 10s
@@ -35,14 +33,6 @@ services:
     ports:
       - "8085" # API endpoint
       - "8090" # DIDComm endpoint
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.sit-cloud-agent.rule=Host(`sit.agent.localhost`)"
-      - "traefik.http.routers.sit-cloud-agent.entrypoints=web"
-      - "traefik.http.services.sit-cloud-agent.loadbalancer.server.port=8085"
-      - "traefik.http.routers.sit-cloud-agent-didcomm.rule=Host(`sit.agent.localhost/didcomm`)"
-      - "traefik.http.routers.sit-cloud-agent-didcomm.entrypoints=web"
-      - "traefik.http.services.sit-cloud-agent-didcomm.loadbalancer.server.port=8090"
     environment:
       POLLUX_DB_HOST: db
       POLLUX_DB_PORT: 5432
@@ -61,9 +51,9 @@ services:
       AGENT_DB_PASSWORD: postgres
       PRISM_NODE_HOST: prism-node
       PRISM_NODE_PORT: 50053
-      POLLUX_STATUS_LIST_REGISTRY_PUBLIC_URL: http://cloud-agent:8085
-      DIDCOMM_SERVICE_URL: http://cloud-agent:8090
-      REST_SERVICE_URL: http://cloud-agent:8085
+      POLLUX_STATUS_LIST_REGISTRY_PUBLIC_URL: http://cloud-agent:9085
+      DIDCOMM_SERVICE_URL: http://cloud-agent:9090
+      REST_SERVICE_URL: http://cloud-agent:9085
       # VAULT_ADDR:
       # VAULT_TOKEN:
       SECRET_STORAGE_BACKEND: postgres
@@ -92,32 +82,24 @@ services:
       timeout: 10s
       retries: 5
 
-  ################
-  ### MEDIATOR ###
-  ################
+#   ################
+#   ### MEDIATOR ###
+#   ################
 
   mongo:
-    image: mongo:6.0
-    ports:
-      - "27017"
+    build: 
+      dockerfile: ../docker/mongodb.dockerfile
+      no_cache: true
+      context: ../docker
     command: [ "--auth" ]
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
-      - MONGO_INITDB_DATABASE=mediator
     volumes:
       - mongo_db:/data/db
       - mongo_configdb:/data/configdb
-      - ${PROJECT_PATH:-$PWD}/mongo-initdb.js:/docker-entrypoint-initdb.d/initdb.js
 
   identus-mediator:
     image: docker.io/identus/identus-mediator:${MEDIATOR_VERSION}
     ports:
-      - "8080"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.sitmediator.rule=Host(`sit.mediator.localhost`)"
-      - "traefik.http.routers.sitmediator.entrypoints=web"
+      - "9080:8080"
     environment:
       # Creates the identity:
       # These keys are for demo purpose only for production deployments generate keys
@@ -127,12 +109,12 @@ services:
       - KEY_AGREEMENT_X=Sr4SkIskjN_VdKTn0zkjYbhGTWArdUNE4j_DmUpnQGw
       - KEY_AUTHENTICATION_D=INXCnxFEl0atLIIQYruHzGd5sUivMRyQOzu87qVerug
       - KEY_AUTHENTICATION_X=MBjnXZxkMcoQVVL21hahWAw43RuAG-i64ipbeKKqwoA
-      - SERVICE_ENDPOINTS=http://identus-mediator:8080;ws://identus-mediator:8080/ws
+      - SERVICE_ENDPOINTS=http://identus-mediator:9080;ws://identus-mediator:9080/ws
       - MONGODB_USER=admin
       - MONGODB_PASSWORD=admin
       - MONGODB_PROTOCOL=mongodb
       - MONGODB_HOST=mongo
-      - MONGODB_PORT=27017
+      - MONGODB_PORT=27018
       - MONGODB_DB_NAME=mediator
     depends_on:
       - "mongo"
@@ -141,7 +123,7 @@ volumes:
   pg_data_db:
   mongo_db:
   mongo_configdb:
-
+  
 networks:
   default:
     name: traefik_default
