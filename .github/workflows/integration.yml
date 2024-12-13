@@ -52,9 +52,6 @@ jobs:
       - name: "run component s1"
         run: echo running component s1 for $COMPONENT
 
-      - name: sleep
-        run: sleep 30
-
   s2:
     needs: main
     if: ${{ needs.main.outputs.s2  == 'enabled' }}
@@ -68,9 +65,6 @@ jobs:
       - name: "run component s2"
         run: echo running component s2 for $COMPONENT
 
-      - name: sleep
-        run: sleep 50
-        
   s3:
     needs: main
     if: ${{ needs.main.outputs.s3  == 'enabled' }}
@@ -84,9 +78,6 @@ jobs:
       - name: "run component s3"
         run: echo running component s3 for $COMPONENT
 
-      - name: sleep
-        run: sleep 60
-  
   finally:
     needs: [s1,s2,s3]
     runs-on: ubuntu-latest
