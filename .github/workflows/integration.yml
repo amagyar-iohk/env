@@ -54,13 +54,13 @@ jobs:
     steps:
       - name: test
         run: |
-          echo s1: ${{ needs.main.outputs.s1 }} - ${{ needs.main.outputs.s1  == 'enabled' }} - ${{ needs.main.outputs.s1  == enabled }}
+          echo s1: ${{ needs.main.outputs.s1 }} - ${{ needs.main.outputs.s1  == 'enabled' }}
           echo s2: ${{ needs.main.outputs.s2 }}
           echo s3: ${{ needs.main.outputs.s3 }}
 
   s1:
     needs: main
-    if: ${{ needs.main.outputs.s1  == 'enabled' }}
+    if: needs.main.outputs.s1  == 'enabled'
     name: "component s1"
     runs-on: ubuntu-latest
 
