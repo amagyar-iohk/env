@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: "test main"
         run: echo running main
 
@@ -30,6 +30,10 @@ jobs:
           COMPONENT: ${{ github.event.inputs.component }}
         run: |
           node generate.js
+          echo s1: $(jq '.s1' env.json)
+          echo s2: $(jq '.s2' env.json)
+          echo s3: $(jq '.s3' env.json)
+          
           echo "s1=$(jq '.s1' env.json)" >> $GITHUB_ENV
           echo "s2=$(jq '.s2' env.json)" >> $GITHUB_ENV
           echo "s3=$(jq '.s3' env.json)" >> $GITHUB_ENV
