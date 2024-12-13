@@ -86,4 +86,11 @@ jobs:
 
       - name: sleep
         run: sleep 60
-        
+  
+  finally:
+    needs: [s1,s2,s3]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "test"
+        run: echo potato!
