@@ -79,6 +79,8 @@ jobs:
         run: echo running component s3 for $COMPONENT
 
   finally:
+    if: always()
+    needs: [s1,s2,s3]
     runs-on: ubuntu-latest
 
     steps:
