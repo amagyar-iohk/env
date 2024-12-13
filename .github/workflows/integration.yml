@@ -1,6 +1,6 @@
 name: Run
 
-run-name: Run [${{github.event.inputs.component }}]
+run-name: Run [${{ github.event.inputs.component }}]
 
 on:
   workflow_dispatch: 
@@ -124,14 +124,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: s1-results
-          path: tmp/${{ github.event.inputs.component }}
+          path: tmp
 
       - name: s2 results
         if: needs.s2.result != 'skipped'
         uses: actions/download-artifact@v4
         with:
           name: s2-results
-          path: tmp/${{ github.event.inputs.component }}
+          path: tmp
 
       - name: s3 results
         if: needs.s3.result != 'skipped'
@@ -140,6 +140,15 @@ jobs:
           name: s3-results
           path: tmp
 
-      - name: test
-        run: ls -la tmp
-    
+      - name: run report
+        working-directory: allure-generator
+        run: |
+          npm i
+          npx allure ../tmp -o ../aggregated-report --name ${{ github.event.inputs.component }}
+
+      - name: Save results
+        uses: actions/upload-artifact@v4
+        with:
+          name: aggregated-report
+          path: tests/allure-results
+          retention-days: 1
