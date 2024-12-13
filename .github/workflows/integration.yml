@@ -19,6 +19,8 @@ jobs:
       s3: ${{ steps.components.outputs.s3 }}
 
     steps:
+      - uses: actions/checkout@v4
+      
       - name: "test main"
         run: echo running main
 
