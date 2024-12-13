@@ -50,39 +50,88 @@ jobs:
 
     steps:
       - name: "run component s1"
-        run: echo running component s1 for $COMPONENT
+        working-directory: tests
+        run: |
+          echo running component s1 for $COMPONENT
+          npm i
+          npm test
+
+      - name: Save results
+        uses: actions/upload-artifact@v2
+        with:
+          name: s1-results
+          path: tests/allure-results
+          retention-days: 1
 
   s2:
     needs: main
-    if: ${{ needs.main.outputs.s2  == 'enabled' }}
+    if: needs.main.outputs.s2  == 'enabled'
     name: "component s2"
     runs-on: ubuntu-latest
-
     env:
       COMPONENT: ${{ github.event.inputs.component }}
-
     steps:
       - name: "run component s2"
-        run: echo running component s2 for $COMPONENT
+        working-directory: tests
+        run: |
+          echo running component s2 for $COMPONENT
+          npm i
+          npm test
+      - name: Save results
+        uses: actions/upload-artifact@v2
+        with:
+          name: s2-results
+          path: tests/allure-results
+          retention-days: 1
 
   s3:
     needs: main
-    if: ${{ needs.main.outputs.s3  == 'enabled' }}
+    if: needs.main.outputs.s3  == 'enabled'
     name: "component s3"
     runs-on: macos-latest
-
     env:
       COMPONENT: ${{ github.event.inputs.component }}
-
     steps:
       - name: "run component s3"
-        run: echo running component s3 for $COMPONENT
+        working-directory: tests
+        run: |
+          echo running component s3 for $COMPONENT
+          npm i
+          npm test
+      - name: Save results
+        uses: actions/upload-artifact@v2
+        with:
+          name: s3-results
+          path: tests/allure-results
+          retention-days: 1
 
-  finally:
+  aggregate:
     if: always()
     needs: [s1,s2,s3]
     runs-on: ubuntu-latest
 
     steps:
-      - name: "test"
-        run: echo potato!
+      - name: s1 results
+        if: needs.s1.result != 'skipped'
+        uses: actions/download-artifact@v2
+        with:
+          name: s1-results
+          path: tmp/${{ github.event.inputs.component }}
+
+      - name: s2 results
+        if: needs.s2.result != 'skipped'
+        uses: actions/download-artifact@v2
+        with:
+          name: s2-results
+          path: tmp/${{ github.event.inputs.component }}
+
+      - name: s3 results
+        if: needs.s3.result != 'skipped'
+        uses: actions/download-artifact@v2
+        with:
+          name: s3-results
+          path: tmp/${{ github.event.inputs.component }}
+
+      - name: test
+        run: ls -la tests
+    
