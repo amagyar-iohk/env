@@ -1,6 +1,6 @@
 name: Run
 
-run-name: Run
+run-name: Run [${{github.event.inputs.component }}]
 
 on:
   workflow_dispatch: 
@@ -54,9 +54,9 @@ jobs:
     steps:
       - name: test
         run: |
-          echo s1: ${{ needs.main.outputs.s1}}
-          echo s2: ${{ needs.main.outputs.s2}}
-          echo s3: ${{ needs.main.outputs.s3}}
+          echo s1: ${{ needs.main.outputs.s1 }} - ${{ needs.main.outputs.s1  == 'enabled' }}
+          echo s2: ${{ needs.main.outputs.s2 }}
+          echo s3: ${{ needs.main.outputs.s3 }}
 
   s1:
     needs: main
