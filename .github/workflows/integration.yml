@@ -34,10 +34,10 @@ jobs:
           echo s2: $(jq '.s2' env.json)
           echo s3: $(jq '.s3' env.json)
           
-          echo "s1=$(jq '.s1' env.json)" >> "$GITHUB_ENV"
-          echo "s2=$(jq '.s2' env.json)" >> "$GITHUB_ENV"
-          echo "s3=$(jq '.s3' env.json)" >> "$GITHUB_ENV"
-          echo "test=test" >> "$GITHUB_ENV"
+          echo "s1=$(jq '.s1' env.json)" >> "$GITHUB_OUTPUT"
+          echo "s2=$(jq '.s2' env.json)" >> "$GITHUB_OUTPUT"
+          echo "s3=$(jq '.s3' env.json)" >> "$GITHUB_OUTPUT"
+          echo "test=test" >> "$GITHUB_OUTPUT"
 
       - name: test
         run: |
