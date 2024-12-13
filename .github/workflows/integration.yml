@@ -34,9 +34,15 @@ jobs:
           echo s2: $(jq '.s2' env.json)
           echo s3: $(jq '.s3' env.json)
           
-          echo "s1=$(jq '.s1' env.json)" >> $GITHUB_ENV
-          echo "s2=$(jq '.s2' env.json)" >> $GITHUB_ENV
-          echo "s3=$(jq '.s3' env.json)" >> $GITHUB_ENV
+          echo "s1=$(jq '.s1' env.json)" >> "$GITHUB_ENV"
+          echo "s2=$(jq '.s2' env.json)" >> "$GITHUB_ENV"
+          echo "s3=$(jq '.s3' env.json)" >> "$GITHUB_ENV"
+
+      - name: test
+        run: |
+          echo ${{ steps.components.outputs.s1 }} -
+          echo ${{ steps.components.outputs.s2 }} -
+          echo ${{ steps.components.outputs.s3 }} -
 
   debug:
     needs: main
@@ -48,7 +54,7 @@ jobs:
           echo s1: ${{ needs.main.outputs.s1}}
           echo s2: ${{ needs.main.outputs.s2}}
           echo s3: ${{ needs.main.outputs.s3}}
-          
+
   s1:
     needs: main
     if: ${{ needs.main.outputs.s1  == 'enabled' }}
