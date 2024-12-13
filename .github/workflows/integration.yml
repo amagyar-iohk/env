@@ -60,7 +60,7 @@ jobs:
 
   s1:
     needs: main
-    if: needs.main.outputs.s1  == 'enabled'
+    if: needs.main.outputs.s1  == '"enabled"'
     name: "component s1"
     runs-on: ubuntu-latest
 
