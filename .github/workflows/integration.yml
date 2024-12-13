@@ -57,7 +57,7 @@ jobs:
           npm test
 
       - name: Save results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: s1-results
           path: tests/allure-results
@@ -78,7 +78,7 @@ jobs:
           npm i
           npm test
       - name: Save results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: s2-results
           path: tests/allure-results
@@ -99,7 +99,7 @@ jobs:
           npm i
           npm test
       - name: Save results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: s3-results
           path: tests/allure-results
@@ -113,21 +113,21 @@ jobs:
     steps:
       - name: s1 results
         if: needs.s1.result != 'skipped'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: s1-results
           path: tmp/${{ github.event.inputs.component }}
 
       - name: s2 results
         if: needs.s2.result != 'skipped'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: s2-results
           path: tmp/${{ github.event.inputs.component }}
 
       - name: s3 results
         if: needs.s3.result != 'skipped'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: s3-results
           path: tmp/${{ github.event.inputs.component }}
