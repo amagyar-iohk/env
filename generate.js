@@ -2,7 +2,7 @@
 (function() {
     const fs = require('node:fs')
 
-    let component = 'a'//process.env.COMPONENT
+    let component = process.env.COMPONENT
     let enabledComponents = {}
 
     if (component == 'a') {
