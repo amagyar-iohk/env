@@ -37,12 +37,15 @@ jobs:
           echo "s1=$(jq '.s1' env.json)" >> "$GITHUB_ENV"
           echo "s2=$(jq '.s2' env.json)" >> "$GITHUB_ENV"
           echo "s3=$(jq '.s3' env.json)" >> "$GITHUB_ENV"
+          echo "test=test" >> "$GITHUB_ENV"
 
       - name: test
         run: |
           echo ${{ steps.components.outputs.s1 }} -
           echo ${{ steps.components.outputs.s2 }} -
           echo ${{ steps.components.outputs.s3 }} -
+          echo ${{ steps.components.outputs.test }} -
+          
 
   debug:
     needs: main
