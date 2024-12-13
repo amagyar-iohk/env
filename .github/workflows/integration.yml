@@ -49,6 +49,8 @@ jobs:
       COMPONENT: ${{ github.event.inputs.component }}
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: "run component s1"
         working-directory: tests
         run: |
@@ -71,6 +73,8 @@ jobs:
     env:
       COMPONENT: ${{ github.event.inputs.component }}
     steps:
+      - uses: actions/checkout@v4
+
       - name: "run component s2"
         working-directory: tests
         run: |
@@ -92,6 +96,8 @@ jobs:
     env:
       COMPONENT: ${{ github.event.inputs.component }}
     steps:
+      - uses: actions/checkout@v4
+
       - name: "run component s3"
         working-directory: tests
         run: |
