@@ -38,6 +38,17 @@ jobs:
           echo "s2=$(jq '.s2' env.json)" >> $GITHUB_ENV
           echo "s3=$(jq '.s3' env.json)" >> $GITHUB_ENV
 
+  debug:
+    needs: main
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: test
+        run: |
+          echo s1: ${{ needs.main.outputs.s1}}
+          echo s2: ${{ needs.main.outputs.s2}}
+          echo s3: ${{ needs.main.outputs.s3}}
+          
   s1:
     needs: main
     if: ${{ needs.main.outputs.s1  == 'enabled' }}
