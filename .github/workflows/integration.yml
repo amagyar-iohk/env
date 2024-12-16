@@ -144,7 +144,7 @@ jobs:
         working-directory: allure-generator
         run: |
           npm i
-          npx allure generate ../tmp -o ../aggregated-report --name ${{ github.event.inputs.component }}
+          
 
       - name: Save results
         uses: actions/upload-artifact@v4
